@@ -21,18 +21,31 @@ async function handleUserResponse(data: UserResponse) {
 }
 
 async function loadUser(): Promise<AuthUser | null> {
+  performance.mark('start');
   console.log('loading user ...', storage.getToken());
   if (process.env.NODE_ENV === 'test') return { name: 'Fernando' } as AuthUser;
   if (!storage.getToken()) return null;
   const isLoggedIn = await magiclink.user.isLoggedIn();
+  performance.mark('loggedCheck');
 
   if (isLoggedIn) {
+    const [jwt, userMetadata] = await Promise.all([magiclink.user.getIdToken(), getUser()]);
+
     /* Get the DID for the user */
-    const jwt = await magiclink.user.getIdToken();
+    console.log('logged in already...');
+    //const jwt = await magiclink.user.getIdToken();
+    performance.mark('getIdToken');
     storage.setToken(jwt);
 
     /* Get user metadata including email */
-    const userMetadata = await getUser();
+    //const userMetadata = await getUser();
+    performance.mark('getMetadata');
+    performance.measure('check login', 'start', 'loggedCheck');
+    performance.measure('get idtoken', 'loggedCheck', 'getIdToken');
+    performance.measure('get metadata', 'getIdToken', 'getMetadata');
+    performance.measure('total', 'start', 'getMetadata');
+    console.log(performance.getEntriesByType('measure'));
+    performance.clearMeasures();
     return userMetadata;
   }
 
