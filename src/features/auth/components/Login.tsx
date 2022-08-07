@@ -9,6 +9,7 @@ import { Title } from '@/componentes/Elements/Title/Title';
 import { Form } from '@/componentes/Form/Form';
 import { Input } from '@/componentes/Form/Inputs';
 import { LoginLayout } from '@/componentes/Layout/LoginLayout';
+import { WalletIssuer } from '@/features/auth';
 import { useAuth } from '@/lib/auth';
 
 export const Login = () => {
@@ -20,7 +21,7 @@ export const Login = () => {
   const handleLogin = async (data: { email: string }) => {
     setIsLoading(true);
     try {
-      await auth.login({ email: data.email });
+      await auth.login({ email: data.email, issuer: WalletIssuer.MAGICLINK });
     } catch (e) {
       alert.error('Error loging in');
     } finally {

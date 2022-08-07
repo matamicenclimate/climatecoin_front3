@@ -18,7 +18,7 @@ export const WalletProvider = ({ children }: ProviderProps) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const auth = process.env.NODE_ENV !== 'test' ? useAuth() : () => ({});
   // @ts-expect-error need to mock this better
-  const account = useGetBalance(auth?.user?.magic_user?.publicAddress ?? null);
+  const account = useGetBalance(auth?.user?.publicAddress ?? null);
 
   return <WalletContext.Provider value={{ account }}>{children}</WalletContext.Provider>;
 };

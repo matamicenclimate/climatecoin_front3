@@ -1,11 +1,11 @@
 import { useAlert } from 'react-alert';
 import { useMutation } from 'react-query';
 
-import { StrapiUser } from '@/features/auth';
+import { AuthUser } from '@/features/auth';
 import { useAuth } from '@/lib/auth';
 import { httpClient } from '@/lib/httpClient';
 
-function putUserType(userId: string, type: string): Promise<StrapiUser> {
+function putUserType(userId: string, type: string): Promise<AuthUser> {
   return httpClient.put(`/users/${userId}`, { type });
 }
 

@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import { useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 
-import { StrapiUser } from '@/features/auth';
+import { AuthUser } from '@/features/auth';
 import { Country } from '@/features/documents';
 import { useAuth } from '@/lib/auth';
 import { httpClient } from '@/lib/httpClient';
@@ -19,7 +19,7 @@ interface UpdateProfileDTO {
   personal_URL: string;
 }
 
-function updateProfile(formData: FormData, userId: string): Promise<StrapiUser> {
+function updateProfile(formData: FormData, userId: string): Promise<AuthUser> {
   const config: AxiosRequestConfig<FormData> = {
     headers: {
       'content-type': 'application/form-data',

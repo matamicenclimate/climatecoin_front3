@@ -1,19 +1,26 @@
 import { Country } from '@/features/documents';
 
-export type MagicUser = {
-  issuer: string;
-  publicAddress: string;
-  email: string;
-  isMfaEnabled: boolean;
-  phoneNumber: null | string;
-};
-
 export type UserResponse = {
   jwt: string;
-  user: MagicUser;
+  user: AuthUser;
 };
 
-export interface StrapiUser {
+export type LoginCredentialsDTO = {
+  email?: string;
+  issuer: WalletIssuer;
+};
+
+export enum WalletIssuer {
+  MAGICLINK = 'magic-link',
+  MYALGO = 'my-algo-connect',
+  WALLETCONNECT = 'wallet-connect',
+}
+
+export type ChallengeResponse = {
+  challengeTxn: Buffer;
+};
+
+export interface AuthUser {
   confirmed?: boolean;
   blocked?: boolean;
   _id?: string;
@@ -34,6 +41,7 @@ export interface StrapiUser {
   country?: Country;
   bio?: string;
   personal_URL?: string;
+  publicAddress?: string;
 }
 
 interface Role {
@@ -61,7 +69,6 @@ export interface Avatar {
   surname: string;
   avatar: AvatarClass;
   id: string;
-  magic_user: MagicUser;
 }
 
 export interface AvatarClass {
@@ -100,5 +107,3 @@ export interface Thumbnail {
   path: null;
   url: string;
 }
-
-export type AuthUser = StrapiUser & { magic_user: MagicUser };
