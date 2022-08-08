@@ -24,7 +24,7 @@ export interface CarbonDocument {
   __v: number;
   title: string;
   credits: string;
-  created_by_user: string;
+  user: object;
   credit_start: Date;
   description: string;
   project_registration: Date;

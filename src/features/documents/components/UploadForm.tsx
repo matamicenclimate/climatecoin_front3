@@ -46,7 +46,7 @@ export enum UploadSteps {
   CONFIRMATION = 4,
 }
 
-export const UploadForm = ({ email }: { email?: string }) => {
+export const UploadForm = () => {
   const { t } = useTranslation();
 
   const resolver = useYupValidationResolver(documentUploadValidationSchema);
@@ -450,13 +450,6 @@ export const UploadForm = ({ email }: { email?: string }) => {
                     required
                     name="verification_report"
                     accept=".pdf"
-                  />
-                  <Input<UploadFormSchema>
-                    {...baseInputProps}
-                    wrapperClassName="col-span-2"
-                    type="hidden"
-                    name="created_by_user"
-                    defaultValue={email ?? ''}
                   />
                   {renderStepperNavigation()}
                 </div>

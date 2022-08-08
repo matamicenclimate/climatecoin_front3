@@ -5,14 +5,14 @@ import { minimalRender, screen } from '@/test/test-utils';
 import { UploadForm } from '../components/UploadForm';
 
 test('renders the upload form', async () => {
-  await minimalRender(<UploadForm email="test@deka.com" />);
+  await minimalRender(<UploadForm />);
 
   const titleElement = await screen.getByRole('heading', { level: 2 });
   expect(titleElement).toHaveTextContent('Project info');
 });
 
 test('switches between steps', async () => {
-  await minimalRender(<UploadForm email="test@deka.com" />);
+  await minimalRender(<UploadForm />);
 
   const goToNextStep = async (title: string) => {
     await act(() => {
@@ -29,7 +29,7 @@ test('switches between steps', async () => {
 });
 
 test('submits the empty form counts steps with error', async () => {
-  await minimalRender(<UploadForm email="test@deka.com" />);
+  await minimalRender(<UploadForm />);
 
   await act(() => {
     fireEvent.click(screen.getByRole('button', { name: 'stepper-CONFIRMATION' }));

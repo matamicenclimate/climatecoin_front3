@@ -9,9 +9,8 @@ function fetchDocuments<K extends Record<string, string>>(filter: K): Promise<[]
   return httpClient.get(`/carbon-documents?${params}`);
 }
 
-export function useGetSwappableDocuments(userEmail?: string) {
+export function useGetSwappableDocuments() {
   const parsed = {
-    created_by_user: userEmail as string,
     status: 'claimed',
   };
   return useQuery(documentKeys.search(parsed), () => fetchDocuments({ ...parsed }));

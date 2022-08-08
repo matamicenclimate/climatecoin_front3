@@ -12,13 +12,12 @@ function fetchDocuments(filter: Record<string, unknown>): Promise<CarbonDocument
   return httpClient.get(`/carbon-documents?${params}`);
 }
 
-export function useGetDocuments(userEmail: string, filter: Record<any, any>, sort: SortState) {
+export function useGetDocuments(filter: Record<any, any>, sort: SortState) {
   const { dates, ...newFilter } = filter;
   const parsed = {
     ...newFilter,
     credit_start_lte: dates?.from ? format(dates.from, 'yyyy-MM-dd') : undefined,
     credit_end_gte: dates?.to ? format(dates.to, 'yyyy-MM-dd') : undefined,
-    created_by_user: userEmail,
     _sort: !!sort.field && !!sort.order ? `${sort.field}:${sort.order}` : undefined,
   };
   return useQuery(documentKeys.search(parsed), () => fetchDocuments(parsed));

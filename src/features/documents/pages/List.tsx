@@ -56,7 +56,7 @@ export const DocumentList = ({
   };
 
   const { sort, toggleSort, renderArrow } = useSort();
-  const documents = useGetDocuments(user?.email as string, methods.watch(), sort);
+  const documents = useGetDocuments(methods.watch(), sort);
 
   const getProfileAvatar = () => {
     if (user?.avatar?.url) {

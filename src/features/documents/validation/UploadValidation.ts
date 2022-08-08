@@ -64,7 +64,6 @@ export const documentUploadValidationSchema = yup.object({
   monitoring_report: fileInputValidation,
   verification_report: fileInputValidation.min(1),
   confirmation: yup.boolean().isTrue(),
-  created_by_user: yup.string().required(),
 });
 
 export type UploadFormSchema = yup.InferType<typeof documentUploadValidationSchema>;

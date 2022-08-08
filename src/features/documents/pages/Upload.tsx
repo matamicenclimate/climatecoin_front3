@@ -2,14 +2,11 @@ import { useTranslation } from 'react-i18next';
 
 import { MainLayout } from '@/componentes/Layout/MainLayout';
 import { PageTitle } from '@/componentes/Layout/PageTitle';
-import { useAuth } from '@/lib/auth';
 
 import { UploadForm } from '../components/UploadForm';
 
 export const Upload = () => {
   const { t } = useTranslation();
-
-  const user = useAuth();
 
   return (
     <MainLayout title={t('head.Upload.title')}>
@@ -18,7 +15,7 @@ export const Upload = () => {
         description={t('documents.Upload.description')}
         linkTo="/"
       />
-      <UploadForm email={user?.user?.email} />
+      <UploadForm />
     </MainLayout>
   );
 };
