@@ -42,6 +42,7 @@ export interface AuthUser {
   bio?: string;
   personal_URL?: string;
   publicAddress?: string;
+  issuer?: WalletIssuer;
 }
 
 interface Role {
