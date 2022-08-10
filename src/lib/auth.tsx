@@ -35,6 +35,18 @@ async function loadUser(): Promise<AuthUser | null> {
 
   const userMetadata = await getUser();
 
+  if (!sw || sw.wname !== userMetadata.issuer)
+    setSW(
+      new SessionWallet(
+        'TestNet',
+        undefined,
+        userMetadata.issuer,
+        userMetadata.email,
+        process.env.REACT_APP_MAGICLINK_PUBLIC as string,
+        process.env.REACT_APP_ALGORAND_RPC_URL as string
+      )
+    );
+
   return userMetadata;
 }
 
