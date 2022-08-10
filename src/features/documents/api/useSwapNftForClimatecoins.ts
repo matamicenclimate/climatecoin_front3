@@ -5,24 +5,26 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import { accountKeys, useOptinToAsset } from '@/features/wallet';
 import { httpClient } from '@/lib/httpClient';
-import { magiclink } from '@/lib/magiclink';
+import { sw } from '@/lib/sessionWallet';
 
 import { CarbonDocument, documentKeys } from '../types';
 
 async function handleSwap(documentId: string): Promise<CarbonDocument> {
-  const unsignedTxns: Buffer[] = await httpClient.get(
+  const unsignedTxnsBuffers: Buffer[] = await httpClient.get(
     `/carbon-documents/${documentId}/swap/prepare`
   );
 
-  const unsignedTxnBuffers = unsignedTxns.map((txn) => Buffer.from(Object.values(txn)));
-  const signedTxnBuffersPromises = unsignedTxnBuffers.map((txn) =>
-    magiclink.algorand.signTransaction(algosdk.decodeUnsignedTransaction(txn).toByte())
+  const unsignedTxns = unsignedTxnsBuffers.map((txn) =>
+    algosdk.decodeUnsignedTransaction(Buffer.from(Object.values(txn)))
   );
 
-  const signedTxnBuffers = await Promise.all(signedTxnBuffersPromises);
+  const signedTxns = await sw?.signTxn(unsignedTxns);
+
+  if (!signedTxns) return Promise.reject('Transaction not signed');
+  const signedTxnsBlob = signedTxns.map((txn) => txn.blob);
 
   return httpClient.post(`/carbon-documents/${documentId}/swap`, {
-    signedTxn: signedTxnBuffers,
+    signedTxn: signedTxnsBlob,
   });
 }
 

@@ -1,10 +1,9 @@
 import algosdk, { waitForConfirmation } from 'algosdk';
-import { Buffer } from 'buffer';
 import { useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 
 import { getClient } from '@/lib/algosdk';
-import { magiclink } from '@/lib/magiclink';
+import { sw } from '@/lib/sessionWallet';
 import { useWalletContext } from '@/providers/Wallet.context';
 
 export function useOptinToAsset() {
@@ -17,7 +16,7 @@ export function useOptinToAsset() {
     // create the asset accept transaction
     console.log('opting in...');
 
-    if (hasOptedIn(asaId)) Promise.resolve();
+    if (hasOptedIn(asaId)) return Promise.resolve();
     if (!account?.address) return;
     console.log('opting in...');
     const suggestedParams = await getClient().getTransactionParams().do();
@@ -33,12 +32,11 @@ export function useOptinToAsset() {
     const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(transactionOptions);
     console.log({ txn });
 
-    const signedTxn = await magiclink.algorand.signGroupTransactionV2([
-      { txn: Buffer.from(txn.toByte()).toString('base64') },
-    ]);
+    const signedTxns = await sw?.signTxn([txn]);
+    if (!signedTxns) return alert.error('Transaction not signed!');
+    const signedTxn = signedTxns[0];
 
-    const blob = signedTxn.map((txn: string) => new Uint8Array(Buffer.from(txn, 'base64')));
-    const { txId } = await getClient().sendRawTransaction(blob).do();
+    const { txId } = await getClient().sendRawTransaction(signedTxn.blob).do();
     const result = await waitForConfirmation(getClient(), txId, 3);
 
     console.log({ result });

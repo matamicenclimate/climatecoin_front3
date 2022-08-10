@@ -35,7 +35,7 @@ export const DocumentDetails = () => {
 
   const handleClaim = async () => {
     if (!document.data || !account?.address || !document.data.developer_nft.asa_id)
-      return console.error('Missing parametes');
+      return console.error('Missing parameters');
     await claimNft.mutateAsync({
       documentId: documentId as string,
       email: auth.user?.email as string,
