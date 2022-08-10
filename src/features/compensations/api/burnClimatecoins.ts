@@ -12,10 +12,11 @@ import { Compensation, CompensationCalculation, compensationKeys } from '../type
 
 async function handleBurnClimatecoins({
   amount,
-  signedParamsTxn,
-  signedFundsTxn,
-  encodedBurnTxn,
   encodedTransferTxn,
+  encodedFundsTxn,
+  encodedParamsTxn,
+  encodedBurnTxn,
+  signature,
   nftIds,
 }: CompensationCalculation): Promise<Compensation> {
   // skip this in testing
@@ -43,9 +44,11 @@ async function handleBurnClimatecoins({
   ]);
   if (!signedTxns) return Promise.reject('Transaction not signed');
 
-  const signedTxn = [signedTransferTxn, fundsTxnBuffer, oracleTxnBuffer, signedBurnTxn];
+  const signedTxnBlobs = signedTxns.map((stxn) => stxn.blob);
+
   return httpClient.post(`/compensations`, {
-    signedTxn,
+    signedTxn: signedTxnBlobs,
+    signature,
     amount,
     nfts: nftIds,
   });

@@ -3,7 +3,8 @@ import { Nft } from '@/features/nfts';
 export const compensationKeys = {
   all: ['compensations'] as const,
   lists: () => [...compensationKeys.all, 'list'] as const,
-  me: (filter: Record<string, unknown>) => [...compensationKeys.all, 'list', 'me', JSON.stringify(filter)] as const,
+  me: (filter: Record<string, unknown>) =>
+    [...compensationKeys.all, 'list', 'me', JSON.stringify(filter)] as const,
   detail: (id: string) => [...compensationKeys.all, 'detail', id] as const,
 };
 
@@ -11,12 +12,12 @@ export interface CompensationCalculation {
   amount: number;
   assets: number[]; // blockchain asa ids
   nftIds: string[]; // db ids
-  signedParamsTxn: { [key: string]: number };
-  signedFundsTxn: { [key: string]: number };
   encodedTransferTxn: { [key: string]: number };
+  encodedFundsTxn: { [key: string]: number };
+  encodedParamsTxn: { [key: string]: number };
   encodedBurnTxn: { [key: string]: number };
+  signature: { [key: string]: number };
 }
-
 export interface Compensation {
   consolidation_certificate_ipfs_cid?: string;
   state: string;
