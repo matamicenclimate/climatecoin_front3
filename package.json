@@ -26,7 +26,7 @@
     "@popperjs/core": "^2.11.4",
     "@sentry/react": "^6.19.6",
     "@sentry/tracing": "^6.19.6",
-    "algorand-session-wallet": "file:../algorand-session-wallet",
+    "algorand-session-wallet": "https://github.com/fernando-deka/algorand-session-wallet#magic-link",
     "algosdk": "^1.13.1",
     "axios": "^0.25.0",
     "buffer": "^6.0.3",
