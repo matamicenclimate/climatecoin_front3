@@ -14,6 +14,7 @@ import {
   UserResponse,
 } from '@/features/auth';
 import { httpClient } from '@/lib/httpClient';
+import { queryClient } from '@/lib/react-query';
 import { setSW, sw } from '@/lib/sessionWallet';
 import storage from '@/utils/storage';
 
@@ -102,6 +103,7 @@ async function logoutFn() {
   sw?.disconnect();
   storage.clearToken();
   window.location.assign(window.location.origin as unknown as string);
+  await queryClient.resetQueries();
 }
 
 const authConfig: AuthProviderConfig<AuthUser | null, unknown> = {
