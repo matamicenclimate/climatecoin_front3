@@ -39,5 +39,5 @@ export interface Compensation {
 export interface CertificateClaimTxns {
   compensationId: string;
   encodedOptinTxn: { [key: string]: number };
-  signedApproveTxn: { [key: string]: number };
+  encodedSendTxn: { [key: string]: number };
 }

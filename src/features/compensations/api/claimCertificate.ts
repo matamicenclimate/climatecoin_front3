@@ -4,19 +4,19 @@ import { useAlert } from 'react-alert';
 import { useMutation } from 'react-query';
 
 import { httpClient } from '@/lib/httpClient';
-import { magiclink } from '@/lib/magiclink';
 import { queryClient } from '@/lib/react-query';
+import { sw } from '@/lib/sessionWallet';
 
 import { CertificateClaimTxns, Compensation, compensationKeys } from '../types';
 
 async function handleClaimCertificate({
   compensationId,
-  signedApproveTxn,
   encodedOptinTxn,
+  encodedSendTxn,
 }: CertificateClaimTxns): Promise<Compensation> {
   // convert the txns to buffers
   const optinTxnBuffer = Buffer.from(Object.values(encodedOptinTxn));
-  const approveTxnBuffer = Buffer.from(Object.values(signedApproveTxn));
+  const sendTxnBuffer = Buffer.from(Object.values(encodedSendTxn));
 
   // skip this in testing
   if (process.env.NODE_ENV === 'test') {
@@ -25,12 +25,14 @@ async function handleClaimCertificate({
     });
   }
 
-  // decode and sign
-  const signedOptinTxn = await magiclink.algorand.signTransaction(
-    algosdk.decodeUnsignedTransaction(optinTxnBuffer).toByte()
-  );
+  const optinTxn = algosdk.decodeUnsignedTransaction(optinTxnBuffer);
+  const sendTxn = algosdk.decodeUnsignedTransaction(sendTxnBuffer);
 
-  const signedTxn = [signedOptinTxn, approveTxnBuffer];
+  // decode and sign
+  const signedTxnObj = await sw?.signTxn([optinTxn, sendTxn]);
+  if (!signedTxnObj) return Promise.reject('Transaction not signed');
+  const signedTxn = signedTxnObj.map((stxn) => stxn.blob);
+
   return httpClient.post(`/compensations/${compensationId}/claim/certificate`, {
     signedTxn,
   });
