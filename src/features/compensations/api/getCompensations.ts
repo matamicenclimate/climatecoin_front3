@@ -6,17 +6,22 @@ import { getFromFilter } from '@/utils/queryParams';
 
 import { Compensation, compensationKeys } from '../types';
 
-function fetchCompensations(filter: Record<string, unknown>): Promise<Compensation[]> {
+export type PaginatedCompensationResponse = {
+  data: Compensation[];
+  total: number;
+};
+
+function fetchCompensations(filter: Record<string, unknown>): Promise<PaginatedCompensationResponse> {
   const params = getFromFilter(filter);
-  return httpClient.get(`/compensations/me?${params}`);
+  return httpClient.get(`/compensations/paginated?${params}`);
 }
 
-export function useGetCompensations(sort: SortState) {
+export function useGetCompensations(sort: SortState, firstIndex?: number, maxItemsPerPage?: number) {
   const filter = {
     _sort: !!sort.field && !!sort.order ? `${sort.field}:${sort.order}` : 'createdAt:desc',
-    _start: '0',
-    _limit: '7',
+    _start: firstIndex ?? '0',
+    _limit: maxItemsPerPage ?? '10',
   };
 
-  return useQuery(compensationKeys.me(filter), () => fetchCompensations(filter));
+  return useQuery(compensationKeys.paginated(filter), () => fetchCompensations(filter));
 }

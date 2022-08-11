@@ -144,7 +144,7 @@
         "operationID": "ID Operation",
         "actions": "Actions"
       },
-      "title": "Compensation History",
+      "title": "My Compensations",
       "status": {
         "accepted": "Accepted",
         "completed": "Completed",

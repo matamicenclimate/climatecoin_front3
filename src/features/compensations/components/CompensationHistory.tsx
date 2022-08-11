@@ -9,19 +9,21 @@ import { Title } from '@/componentes/Elements/Title/Title';
 import { Aside } from '@/componentes/Layout/Aside/Aside';
 import { OperationsMenu } from '@/componentes/Layout/Aside/components/OperationsMenu';
 import { PersonalMenu } from '@/componentes/Layout/Aside/components/PersonalMenu';
+import { Pagination } from '@/componentes/Pagination/Pagination';
 import { EXPLORER_URL, IPFS_GATEWAY_URL } from '@/config';
-import { Compensation } from '@/features/compensations';
 import { useSort } from '@/hooks/useSort';
 import { useAuth } from '@/lib/auth';
 import { useCurrencyContext } from '@/providers/Currency.context';
+import { usePaginationContext } from '@/providers/Pagination.context';
 
-import { useGetCompensations } from '../api/getCompensations';
+import { PaginatedCompensationResponse, useGetCompensations } from '../api/getCompensations';
 
 export const CompensationHistory = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const { formatter, climatecoinValue } = useCurrencyContext();
   const { sort, toggleSort, renderArrow } = useSort();
+  const { firstIndex, maxItemsPerPage, setTotalItems } = usePaginationContext();
 
   const getProfileAvatar = () => {
     if (user?.avatar?.url) {
@@ -34,8 +36,9 @@ export const CompensationHistory = () => {
     mode: 'onBlur',
   });
 
-  const compensations = useGetCompensations(sort);
-
+  const paginatedCompensationResponse = useGetCompensations(sort, firstIndex, maxItemsPerPage);
+  if (paginatedCompensationResponse?.data?.total) setTotalItems(paginatedCompensationResponse.data.total);
+  const itemsToDisplay = paginatedCompensationResponse?.data?.data?.length || 0;
   const thStyles = 'flex cursor-pointer text-sm items-center pb-3';
   const linkStyles = 'inline-flex items-center';
 
@@ -60,9 +63,9 @@ export const CompensationHistory = () => {
     return t('compensate.History.status.pending');
   };
 
-  const renderTable = (model:Compensation[]) => (
+  const renderTable = (model:PaginatedCompensationResponse) => (
     <tbody>
-      {model.map((comp) => (
+      {model.data.map((comp) => (
           <tr key={comp.id}>
             <td>
               <div className="flex py-3">
@@ -160,11 +163,12 @@ export const CompensationHistory = () => {
                 </tr>
               </thead>
 
-              <DataRenderer<Compensation[]>
-                data={compensations}
+              <DataRenderer<PaginatedCompensationResponse>
+                data={paginatedCompensationResponse}
                 render={renderTable}
               />
             </table>
+            {itemsToDisplay > 0 && (<Pagination/>)}
           </div>
         </form>
       </main>
