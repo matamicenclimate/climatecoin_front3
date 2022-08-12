@@ -545,8 +545,16 @@
     "funds": {
       "dialog": {
         "send": {
-          "title": "Send funds"
-        }
+          "title": "Send funds",
+          "claim": "Send your funds to another wallet, enter the wallet address. Warning. If you enter the wrong address you will lose your funds.",
+          "acceptLabel": "Send"
+        },
+        "add": {
+          "acceptLabel": "Add",
+          "title": "Add funds",
+          "claim": "Add funds to your wallet. Enter the source wallet address. Warning. If you enter the wrong address, you will lose your funds."
+        },
+        "to": "Send to..."
       }
     },
     "asset": {

@@ -546,8 +546,16 @@
     "funds": {
       "dialog": {
         "send": {
-          "title": "Enviar fondos"
-        }
+          "title": "Enviar fondos",
+          "claim": "Envíe sus fondos a otra billetera, ingrese la dirección de la billetera. \nAdvertencia. \nSi ingresa la dirección incorrecta, perderá sus fondos.",
+          "acceptLabel": "Enviar"
+        },
+        "add": {
+          "acceptLabel": "Agregar",
+          "title": "Añadir fondos",
+          "claim": "Agregue fondos a su billetera. \nIngrese la dirección de la billetera de origen. \nAdvertencia. \nSi ingresa la dirección incorrecta, perderá sus fondos."
+        },
+        "to": "Enviar a..."
       }
     },
     "asset": {

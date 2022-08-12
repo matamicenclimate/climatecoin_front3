@@ -1,69 +1,80 @@
-import clsx from 'clsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Dl, DlItem } from '@/componentes/DescriptionList';
 import { Dialog } from '@/componentes/Dialog/Dialog';
 import { Button } from '@/componentes/Elements/Button/Button';
-import { Link } from '@/componentes/Elements/Link/Link';
-import { EXPLORER_URL } from '@/config';
+import { useCurrencyContext } from '@/providers/Currency.context';
+import { useWalletContext } from '@/providers/Wallet.context';
+
+import { Account, ButtonProps, DialogDataProps } from '../types';
 
 type SendFundsProps = {
-  account: any;
+  account: Account;
   className?: string;
+  type: 'add' | 'send';
 };
 
-export function SendFunds({ account, className }: SendFundsProps) {
+export function SendFunds({ account, className, type }: SendFundsProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const { climatecoinBalance } = useWalletContext();
+  const { formatToCC } = useCurrencyContext();
+
+  const send: DialogDataProps = {
+    acceptLabel: t('Wallet.funds.dialog.send.acceptLabel'),
+    title: t('Wallet.funds.dialog.send.title'),
+    claim: t('Wallet.funds.dialog.send.claim'),
+    accentColor: 'text-primary-brightGreen',
+    button: {
+      variant: 'grey',
+      onClick: () => setIsOpen(true),
+      label: t('Wallet.funds.dialog.send.title'),
+    },
+  };
+
+  const add: DialogDataProps = {
+    acceptLabel: t('Wallet.funds.dialog.add.acceptLabel'),
+    title: t('Wallet.funds.dialog.add.title'),
+    claim: t('Wallet.funds.dialog.add.claim'),
+    accentColor: 'text-primary-brightGreen',
+    button: {
+      variant: 'grey',
+      onClick: () => setIsOpen(true),
+      label: t('Wallet.funds.dialog.add.title'),
+    },
+  };
+
+  const DialogData = { add, send };
+
+  const renderButton = ({ variant, onClick, label }: ButtonProps) => {
+    return (
+      <Button type="button" className="bg-neutral-7" variant={variant} size="sm" onClick={onClick}>
+        {label}
+      </Button>
+    );
+  };
 
   return (
     <>
-      <div className={clsx(className, 'flex flex-row space-x-3')}>
-        <Link
-          href={`${EXPLORER_URL}address/${encodeURIComponent(account?.address as string)}`}
-          className="inline-flex items-center font-bold no-underline"
-        >
-          <Button type="button" className="bg-neutral-7" variant="grey" size="sm">
-            {t('Wallet.button.view')}
-          </Button>
-        </Link>
-        <Button
-          type="button"
-          className="bg-neutral-7"
-          variant="grey"
-          size="sm"
-          onClick={() => setIsOpen(true)}
-        >
-          Add funds
-        </Button>
-        <Button
-          type="button"
-          className="bg-neutral-7"
-          variant="grey"
-          size="sm"
-          onClick={() => setIsOpen(true)}
-        >
-          Send funds
-        </Button>
-      </div>
+      {renderButton(DialogData[type].button)}
       <Dialog
         size="xs"
         isOpen={isOpen}
         setIsOpen={() => setIsOpen(false)}
-        acceptLabel="Send"
-        cancelLabel="Cancel"
+        acceptLabel={DialogData[type].acceptLabel}
+        cancelLabel={t('Wallet.action.dialog.cancel')}
         onCancel={() => setIsOpen(!isOpen)}
-        title="Send funds"
-        claim="Send your funds to another wallet, enter the wallet address. Warning. If you enter the wrong address you will lose your funds."
+        title={DialogData[type].title}
+        claim={DialogData[type].claim}
       >
         <Dl wrapperClassName={'mb-8'}>
           <DlItem
             dt={'Your Climatecoins'}
-            dd={<span> {t('intlNumber', { val: account.amount.toFixed(2) })} CC</span>}
+            dd={<span> {formatToCC(climatecoinBalance())} CC</span>}
           />
           <DlItem
-            dt={'Send...'}
+            dt={t('Wallet.action.dialog.amount')}
             dd={<input type="text" id="name" name="name" className="w-full border-2" required />}
             ddClassNames="text-primary-brightGreen"
           />
@@ -71,7 +82,7 @@ export function SendFunds({ account, className }: SendFundsProps) {
 
           <DlItem
             fullWidth
-            dt={'Send to'}
+            dt={type === 'send' ? t('Wallet.action.dialog.to') : t('Wallet.action.dialog.from')}
             dd={<textarea id="name" name="name" maxLength={70} className="w-full border-2" />}
           />
         </Dl>

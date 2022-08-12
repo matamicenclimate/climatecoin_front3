@@ -502,8 +502,16 @@
     "funds": {
       "dialog": {
         "send": {
-          "title": "Envoyez de l'argent"
-        }
+          "title": "Envoyez de l'argent",
+          "claim": "Envoyez vos fonds vers un autre portefeuille, entrez l'adresse du portefeuille. \nAvertissement. \nSi vous entrez la mauvaise adresse, vous perdrez vos fonds.",
+          "acceptLabel": "Envoyer"
+        },
+        "add": {
+          "acceptLabel": "Ajouter",
+          "title": "Ajouter des fonds",
+          "claim": "Ajoutez des fonds à votre portefeuille. \nEntrez l'adresse du portefeuille source. \nAvertissement. \nSi vous entrez la mauvaise adresse, vous perdrez vos fonds."
+        },
+        "to": "Envoyer à..."
       }
     },
     "asset": {
