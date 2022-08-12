@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useAlert } from 'react-alert';
 import { useTranslation } from 'react-i18next';
 
 import { Card } from '@/componentes/Card/Card';
@@ -18,11 +19,13 @@ import { useWalletContext } from '@/providers/Wallet.context';
 
 import { AssetAction } from '../components/AssetAction';
 import { SendFunds } from '../components/SendFunds';
+import { Account } from '../types';
 
 export const Wallet = () => {
   const { t } = useTranslation();
   const { account, climatecoinBalance } = useWalletContext();
   const { user } = useAuth();
+  const alert = useAlert();
 
   const { sort, toggleSort, renderArrow } = useSort();
   const { formatter, climatecoinValue, formatToCC } = useCurrencyContext();
@@ -32,6 +35,11 @@ export const Wallet = () => {
       return user?.avatar.url;
     }
     return 'avatar-placeholder.jpg';
+  };
+
+  const copyAddress = (account: Account) => {
+    navigator.clipboard.writeText(account?.address);
+    alert.success('Account number copied to clipboard');
   };
 
   const renderNfts = () => {
@@ -128,7 +136,12 @@ export const Wallet = () => {
                         </div>
                         <div className="justify-items-end font-bold text-black">
                           <span className="px-4">{account?.address}</span>
-                          <span className="text-primary-calmGreen">{t('Wallet.copy')}</span>
+                          <button
+                            className="text-primary-calmGreen"
+                            onClick={() => copyAddress(account)}
+                          >
+                            {t('Wallet.copy')}
+                          </button>
                         </div>
                       </div>
                       <hr className="w-full" />
