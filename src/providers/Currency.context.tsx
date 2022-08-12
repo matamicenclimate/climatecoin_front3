@@ -89,7 +89,7 @@ export const useCurrencyContext = () => {
   };
 
   const formatToCC = (amount: number) => {
-    return `${t('intlNumber', { val: amount.toFixed(2) })} CC`;
+    return `${t('intlNumber', { val: amount.toFixed(2) })}`;
   };
 
   const climatecoinValue = (amountOfClimatecoins: number, target?: keyof typeof currencies) => {

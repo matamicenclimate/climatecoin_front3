@@ -6,31 +6,17 @@ import { Dialog } from '@/componentes/Dialog/Dialog';
 import { Button } from '@/componentes/Elements/Button/Button';
 import { useCurrencyContext } from '@/providers/Currency.context';
 
-import { Asset } from '../types';
+import { Asset, ButtonProps, DialogDataProps } from '../types';
 
 type AssetActionProps = {
   asset: Asset;
-  account: string;
+  address: string;
   disabled: boolean;
   type: 'send' | 'remove';
   className?: string;
 };
 
-type DialogDataProps = {
-  acceptLabel: string;
-  title: string;
-  claim: string;
-  accentColor: string;
-  button: ButtonProps;
-};
-
-type ButtonProps = {
-  variant: 'grey' | 'danger';
-  onClick: () => void;
-  label: string;
-};
-
-export function AssetAction({ asset, account, disabled, className, type }: AssetActionProps) {
+export function AssetAction({ asset, address, disabled, className, type }: AssetActionProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const { formatToCC } = useCurrencyContext();
@@ -108,7 +94,7 @@ export function AssetAction({ asset, account, disabled, className, type }: Asset
         <Dl wrapperClassName={'mb-8'}>
           <DlItem
             dt={t('Wallet.action.dialog.from')}
-            dd={`${account?.slice(0, 30)}...${account?.slice(-3)}`}
+            dd={`${address?.slice(0, 30)}...${address?.slice(-3)}`}
           />
 
           <hr className="col-span-2" />

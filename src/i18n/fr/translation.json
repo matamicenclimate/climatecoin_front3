@@ -498,6 +498,16 @@
         "from": "Du portefeuille...",
         "to": "Envoyer à..."
       }
+    },
+    "funds": {
+      "dialog": {
+        "send": {
+          "title": "Envoyez de l'argent"
+        }
+      }
+    },
+    "asset": {
+      "error": "Il n'y a aucun actif à afficher"
     }
   },
   "compensate": {

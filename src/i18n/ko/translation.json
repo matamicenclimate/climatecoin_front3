@@ -492,6 +492,16 @@
         "from": "지갑에서...",
         "to": "보내기..."
       }
+    },
+    "funds": {
+      "dialog": {
+        "send": {
+          "title": "자금 보내기"
+        }
+      }
+    },
+    "asset": {
+      "error": "표시할 자산이 없습니다"
     }
   },
   "compensate": {

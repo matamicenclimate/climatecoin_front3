@@ -541,6 +541,16 @@
         "from": "From wallet...",
         "to": "Send to..."
       }
+    },
+    "funds": {
+      "dialog": {
+        "send": {
+          "title": "Send funds"
+        }
+      }
+    },
+    "asset": {
+      "error": "There are no assets to display"
     }
   },
   "nfts": {

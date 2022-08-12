@@ -542,6 +542,16 @@
         "from": "De la billetera...",
         "to": "Enviar a..."
       }
+    },
+    "funds": {
+      "dialog": {
+        "send": {
+          "title": "Enviar fondos"
+        }
+      }
+    },
+    "asset": {
+      "error": "No hay activos para mostrar"
     }
   },
   "nfts": {

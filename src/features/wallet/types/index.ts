@@ -3,7 +3,7 @@ export interface IndexerAccount {
   'current-round': number;
 }
 
-interface Account {
+export interface Account {
   address: string;
   amount: number;
   'amount-without-pending-rewards': number;
@@ -29,3 +29,17 @@ export interface Asset {
   'is-frozen': boolean;
   'opted-in-at-round': number;
 }
+
+export type DialogDataProps = {
+  acceptLabel: string;
+  title: string;
+  claim: string;
+  accentColor: string;
+  button: ButtonProps;
+};
+
+export type ButtonProps = {
+  variant: 'grey' | 'danger';
+  onClick: () => void;
+  label: string;
+};
